@@ -1,0 +1,38 @@
+<!-- <dx-popup
+    [(visible)]="isVisible"
+    [hideOnOutsideClick]="true"
+    [height]="300"
+    [width]="500"
+    [showCloseButton]="false"
+    title="Lọc dữ liệu"
+    contentTemplate="popup-content">
+    <div *dxTemplate="let data of 'popup-content'">
+        <dx-scroll-view 
+            width="100%"
+            height="100%">
+            <ng-container *ngFor="let field of fields">
+                <dx-drop-down-box
+                    [label]="field.name"
+                    labelMode="floating"
+                    [(value)]="field.selectedValue"
+                    placeholder="Select a value..."
+                    (onValueChanged)="syncTreeViewSelection($event)">
+                    <dx-list 
+                        displayExpr="text"
+                        keyExpr="value"
+                        [dataSource]="field.data" 
+                        (onSelectionChanged)="changeDropDownBoxValue($event)"
+                    >
+                    </dx-list>
+                </dx-drop-down-box>
+            </ng-container>
+        </dx-scroll-view>
+    </div>
+    <dxo-position my="right top" at="right bottom" of="#target" collision="fit"></dxo-position>
+</dx-popup>
+
+<dx-button
+    id="target"
+    text="Lọc"
+    (onClick)="togglePopup()">
+</dx-button> -->
