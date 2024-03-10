@@ -20,6 +20,9 @@ export class TextInputComponent implements ControlValueAccessor {
     @Input()
     type?: string;
 
+    @Input()
+    styleClass?: string;
+
     @Input('value')
     get value(): string {
         return this._value;

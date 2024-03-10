@@ -1,6 +1,9 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { AuthService } from '../../../core/services';
+ import { Component, OnInit } from '@angular/core';
+import { AuthService, UserStorageService } from '../../../core/services';
 import { Router } from '@angular/router';
+import { MenuItem, PrimeIcons } from 'primeng/api';
+import { Tenant, UserInfo } from '../../../core/schemas/user.schema';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
@@ -9,20 +12,43 @@ import { Router } from '@angular/router';
 })
 
 export class HeaderComponent implements OnInit {
-  @Output()
-  menuToggle = new EventEmitter<boolean>();
 
-  @Input()
-  menuToggleEnabled = false;
+  items!: MenuItem[];
+  user!: UserInfo | null;
+  tenant!: Tenant | null | undefined;
+  form: FormGroup = new FormGroup({
+    search: new FormControl('')
+  })
 
-  title: string = 'ServeSync';
+  constructor(
+    private authService: AuthService, 
+    private userStorage: UserStorageService,
+    private router: Router
+  ) { }
 
-  constructor(private authService: AuthService, private router: Router) { }
+  ngOnInit(): void {
+    this.userStorage.currentUser.subscribe(user => {
+      this.user = user;
+      this.tenant = this.userStorage.getCurrentTenant();
+    });
 
-  ngOnInit() {
-  }
+    this.items = [
+      {
+        label: 'Đăng xuất',
+        icon: PrimeIcons.SIGN_OUT,
+        command: ($event) => {
+          this.authService.signOut();
+          this.router.navigate(['/auth/login']);
+        }
+      },
+    ]
 
-  toggleMenu = () => {
-    this.menuToggle.emit();
+    if (this.tenant) {
+      this.items.push({
+        label: this.tenant?.name,
+        icon: this.tenant?.avatarUrl,
+        styleClass: 'truncate'
+      });
+    }
   }
 }

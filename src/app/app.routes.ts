@@ -14,12 +14,12 @@ export const routes: Routes = [
       component: BasicLayoutComponent,
       loadChildren: () => import('./pages/auth/auth.module').then(x => x.AuthModule),
     },
-    // {
-    //   path: 'students',
-    //   component: SideBarLayout,
-    //   loadChildren: () => import('./pages/students/student.module').then(x => x.StudentModule),
-    //   canActivate: [ AuthGuard ]
-    // },
+    {
+      path: 'students',
+      component: SideBarLayout,
+      loadChildren: () => import('./pages/students/student.module').then(x => x.StudentModule),
+      canActivate: [ AuthGuard ]
+    },
     {
       path: '**',
       redirectTo: 'home'

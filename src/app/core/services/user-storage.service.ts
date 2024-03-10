@@ -1,6 +1,6 @@
 import { BehaviorSubject } from "rxjs";
 import { Injectable } from "@angular/core";
-import { UserInfo } from "../schemas/user.schema";
+import { Tenant, UserInfo } from "../schemas/user.schema";
 
 @Injectable({ providedIn: 'root' })
 export class UserStorageService {
@@ -12,5 +12,13 @@ export class UserStorageService {
 
     getCurrentUser() : UserInfo | null {
         return this.currentUser.value;
+    }
+
+    getCurrentTenant() : Tenant | null | undefined {
+        const user = this.currentUser.value;
+        if (user == null)
+            return null;
+        
+        return user.tenants.find(x => x.id == user.tenantId);
     }
 }
