@@ -1,0 +1,50 @@
+<p-table 
+    [value]="data"
+    [lazy]="true"
+    [paginator]="true"
+    [rows]="model.rows"
+    [showCurrentPageReport]="true"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [totalRecords]="totalRecords"
+    (onPage)="onPageChange($event)"
+    styleClass="p-datatable-gridlines {{ styleClass }}" 
+    currentPageReportTemplate="Hiển thị {{ model.rows }} trên {totalRecords} kết quả">
+
+    <ng-template pTemplate="caption">
+        <div class="flex">
+            <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"></button>
+            <form [formGroup]="filterForm" class="p-input-icon-left ml-auto">
+                <app-text-input
+                    formControlName="search"
+                    placeHolder="Nhập thông tin tìm kiếm"
+                    styleClass="m-0 rounded-full"
+                ></app-text-input>
+            </form>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+        <tr>
+            <th *ngFor="let col of model.columns" class="border">
+                {{ col.name }}
+            </th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+        <ng-container *ngIf="!model.pagedResult">
+            <tr>
+                <td><p-skeleton></p-skeleton></td>
+                <td><p-skeleton></p-skeleton></td>
+                <td><p-skeleton></p-skeleton></td>
+                <td><p-skeleton></p-skeleton></td>
+            </tr>
+        </ng-container>
+        <ng-container *ngIf="model.pagedResult">
+            <tr>
+                <td class="border" *ngFor="let col of model.columns" [innerHTML]="col.generate != null ? col.generate(row) : row[col.field]"></td>
+            </tr>
+        </ng-container>
+    </ng-template>
+
+</p-table>

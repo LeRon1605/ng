@@ -8,8 +8,8 @@ import { ResetPasswordFormComponent } from "./reset-password-form/reset-password
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { ReactiveFormsModule } from "@angular/forms";
-import { ServeSyncFormControlModule } from "../../shared/components/form-control.module";
-import { ServeSyncCommonModule } from "../../shared/components/common.module";
+import { ServeSyncFormControlModule } from "../../shared/components/form-controls/form-control.module";
+import { ServeSyncCommonModule } from "../../shared/components/common/common.module";
 
 @NgModule({
     declarations: [

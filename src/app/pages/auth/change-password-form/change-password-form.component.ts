@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService, ToastService } from '../../../core/services';
 import { finalize } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';

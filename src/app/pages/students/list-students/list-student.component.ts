@@ -1,109 +1,133 @@
 import { Component, OnInit } from "@angular/core";
-// import DataSource from "devextreme/data/data_source";
-import { lastValueFrom, map } from "rxjs";
+import { StudentViewModel } from "../../../core/schemas/student.schema";
+import { EducationProgramService, FacultyService, HomeRoomService, StudentService } from "../../../core/services";
+import { PagedResult } from "../../../core/schemas/paged.schema";
+import { DatatableOption } from "../../../shared/components/datatable/datatable.component";
 
 @Component({
     selector: 'app-list-student',
     templateUrl: './list-student.component.html'
 })
 export class ListStudentComponent implements OnInit {
+    
+    currentPage = 1;
+    students!: PagedResult<StudentViewModel>;
+    dataTable: DatatableOption = {
+        title: 'Danh sách sinh viên',
+        rows: 10,
+        columns: [
+            {
+                name: 'Họ và tên',
+                field: 'fullName'
+            },
+            {
+                name: 'MSSV',
+                field: 'code'
+            },
+            {
+                name: 'Email',
+                field: 'email'
+            },
+            {
+                name: 'Giới tính',
+                field: 'gender',
+                generate: x => x ? 'Nam' : 'Nữ'
+            },
+            {
+                name: 'Giới tính',
+                field: 'gender',
+                generate: x => x.gender ? 'Nam' : 'Nữ'
+            },
+            {
+                name: 'Quê quán',
+                field: 'homeTown'
+            },
+            {
+                name: 'Khoa',
+                field: 'faculty.name',
+                generate: x => x.faculty.name
+            },
+            {
+                name: 'Lớp SH',
+                field: 'homeRoom.name',
+                generate: x => x.homeRoom.name
+            },
+            {
+                name: 'Điểm',
+                field: 'score'
+            }
+        ]
+    }
+
+    constructor(
+        private studentService: StudentService, 
+        private facultyService: FacultyService,
+        private homeRoomService: HomeRoomService,
+        private educationProgramService: EducationProgramService
+    ) { }
+
     ngOnInit(): void {
-        
-    } 
-    // studentDataSource!: DataSource;
-    // facultyDataSource!: any;
-    // homeRoomDataSource!: any;
-    // educationProgramDataSource!: any;
-    // searchText: string = '';
-    // genderHeaderFilter = [
-    //     {
-    //         text: 'Nam',
-    //         value: ['gender', true]
-    //     }, 
-    //     {
-    //         text: 'Nữ',
-    //         value: [
-    //             ['gender', false]
-    //         ]
-    //     }
-    // ];
 
-    // constructor(
-    //     private studentService: StudentService, 
-    //     private facultyService: FacultyService,
-    //     private homeRoomService: HomeRoomService,
-    //     private educationProgramService: EducationProgramService
-    // ) { }
+        this.loadData();
 
-    // ngOnInit(): void {
+        // this.facultyService.getAllFaculties()
+        //     .pipe(
+        //         map(faculties => {
+        //             return faculties.map(f => {
+        //                 return {
+        //                     text: f.name,
+        //                     value: ['faculty', f.id]
+        //                 }
+        //             })
+        //         })
+        //     )
+        //     .subscribe(faculties => {
+        //         this.facultyDataSource = faculties;
+        //     });
 
-    //     this.studentDataSource = new DataSource({
-    //         key: 'id',
-    //         paginate: true,
-    //         requireTotalCount: true,
-    //         load: (loadOptions) => {
-    //             const { take, filter } = loadOptions;
+        // this.homeRoomService.getAllHomeRoom()
+        //     .pipe(
+        //         map(homeRooms => {
+        //             return homeRooms.map(r => {
+        //                 return {
+        //                     text: r.name,
+        //                     value: ['homeroom', r.id]
+        //                 }
+        //             })
+        //         })
+        //     )
+        //     .subscribe(homeRooms => {
+        //         this.homeRoomDataSource = homeRooms;
+        //     });
 
-    //             console.log(filter);
+        // this.educationProgramService.getAllEducationPrograms()
+        //     .pipe(
+        //         map(educationPrograms => {
+        //             return educationPrograms.map(r => {
+        //                 return {
+        //                     text: r.name,
+        //                     value: ['education-program', r.id]
+        //                 }
+        //             })
+        //         })
+        //     )
+        //     .subscribe(educationPrograms => {
+        //         this.educationProgramDataSource = educationPrograms;
+        //     });
+    }
 
-    //             const loadStudent$ = this.studentService.getAllStudents(this.studentDataSource.pageIndex() + 1, <number>take, this.searchText).pipe(map(x => {
-    //                 return {
-    //                     data: x.data,
-    //                     totalCount: x.total
-    //                 }
-    //             }));
+    onPageChange(page: number) {
+        this.currentPage = page;
+        this.loadData();
+    }
 
-    //             return lastValueFrom(loadStudent$);
-    //         }
-    //     });
+    loadData() {
+        this.studentService.getAllStudents(this.currentPage, 10, '').subscribe(x => {
+            this.dataTable.pagedResult = x;
+        });
+    }
 
-    //     this.facultyService.getAllFaculties()
-    //         .pipe(
-    //             map(faculties => {
-    //                 return faculties.map(f => {
-    //                     return {
-    //                         text: f.name,
-    //                         value: ['faculty', f.id]
-    //                     }
-    //                 })
-    //             })
-    //         )
-    //         .subscribe(faculties => {
-    //             this.facultyDataSource = faculties;
-    //         });
-
-    //     this.homeRoomService.getAllHomeRoom()
-    //         .pipe(
-    //             map(homeRooms => {
-    //                 return homeRooms.map(r => {
-    //                     return {
-    //                         text: r.name,
-    //                         value: ['homeroom', r.id]
-    //                     }
-    //                 })
-    //             })
-    //         )
-    //         .subscribe(homeRooms => {
-    //             this.homeRoomDataSource = homeRooms;
-    //         });
-
-    //     this.educationProgramService.getAllEducationPrograms()
-    //         .pipe(
-    //             map(educationPrograms => {
-    //                 return educationPrograms.map(r => {
-    //                     return {
-    //                         text: r.name,
-    //                         value: ['education-program', r.id]
-    //                     }
-    //                 })
-    //             })
-    //         )
-    //         .subscribe(educationPrograms => {
-    //             this.educationProgramDataSource = educationPrograms;
-    //         });
-    // }
-
-    // calculateGenderValue(gender: boolean) {
-    //     return gender ? 'Nam' : 'Nữ';
-    // }
+    calculateGenderValue(gender: boolean) {
+        return gender ? 'Nam' : 'Nữ';
+    }
 }

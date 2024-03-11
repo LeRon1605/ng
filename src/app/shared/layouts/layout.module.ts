@@ -15,7 +15,7 @@ import { MenuModule } from 'primeng/menu';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { ReactiveFormsModule } from "@angular/forms";
-import { ServeSyncFormControlModule } from "../components/form-control.module";
+import { ServeSyncFormControlModule } from "../components/form-controls/form-control.module";
 import { SkeletonModule } from 'primeng/skeleton';
 
 @NgModule({

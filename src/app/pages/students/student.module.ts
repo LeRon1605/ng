@@ -3,6 +3,7 @@ import { StudentRoutingModule } from "./student.routing";
 import { StudentComponent } from "./student.component";
 import { AddStudentComponent } from "./add-student/add-student.component";
 import { ListStudentComponent } from "./list-students/list-student.component";
+import { DataTableModule } from "../../shared/components/datatable/datatable.component";
 @NgModule({
     declarations: [
         StudentComponent,
@@ -10,7 +11,8 @@ import { ListStudentComponent } from "./list-students/list-student.component";
         ListStudentComponent
     ],
     imports: [
-        StudentRoutingModule
+        StudentRoutingModule,
+        DataTableModule
     ]
 })
 export class StudentModule { }

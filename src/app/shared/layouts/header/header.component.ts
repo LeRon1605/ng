@@ -44,7 +44,7 @@ export class HeaderComponent implements OnInit {
     ]
 
     if (this.tenant) {
-      this.items.push({
+      this.items.unshift({
         label: this.tenant?.name,
         icon: this.tenant?.avatarUrl,
         styleClass: 'truncate'
