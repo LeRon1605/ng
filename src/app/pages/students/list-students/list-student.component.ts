@@ -11,6 +11,7 @@ import { DatatableOption } from "../../../shared/components/datatable/datatable.
 export class ListStudentComponent implements OnInit {
     
     currentPage = 1;
+    search = '';
     students!: PagedResult<StudentViewModel>;
     dataTable: DatatableOption = {
         title: 'Danh sách sinh viên',
@@ -121,8 +122,13 @@ export class ListStudentComponent implements OnInit {
         this.loadData();
     }
 
+    onSearchChange(search: string) {
+        this.search = search;
+        this.loadData();
+    }
+
     loadData() {
-        this.studentService.getAllStudents(this.currentPage, 10, '').subscribe(x => {
+        this.studentService.getAllStudents(this.currentPage, this.dataTable.rows, this.search).subscribe(x => {
             this.dataTable.pagedResult = x;
         });
     }

@@ -11,15 +11,17 @@
     currentPageReportTemplate="Hiển thị {{ model.rows }} trên {totalRecords} kết quả">
 
     <ng-template pTemplate="caption">
-        <div class="flex">
-            <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"></button>
-            <form [formGroup]="filterForm" class="p-input-icon-left ml-auto">
-                <app-text-input
-                    formControlName="search"
-                    placeHolder="Nhập thông tin tìm kiếm"
-                    styleClass="m-0 rounded-full"
-                ></app-text-input>
-            </form>
+        <div class="flex flex-row items-center">
+            <span> {{ model.title }} </span>
+            <div class="p-input-icon-left ml-auto">
+                <input 
+                    id="input"
+                    (keyup)="onSearch($event)"
+                    class=" text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-50 border border-gray-300 text-gray-900"
+                    placeholder="Nhập thông tin tìm kiếm"
+                    pInputText 
+                />
+            </div>
         </div>
     </ng-template>
 

@@ -1,10 +1,12 @@
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, Input, NgModule, Output } from "@angular/core";
+import { Component, EventEmitter, Input, NgModule, OnInit, Output } from "@angular/core";
 import { TableModule } from 'primeng/table';
 import { SkeletonModule } from 'primeng/skeleton';
 import { PagedResult } from "../../../core/schemas/paged.schema";
 import { ServeSyncFormControlModule } from "../form-controls/form-control.module";
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { InputTextModule } from 'primeng/inputtext';
+import { Subject, debounceTime, distinctUntilChanged } from "rxjs";
 
 export interface DatatableOption {
     title: string | null;
@@ -23,7 +25,9 @@ export interface DatatableColumn {
     selector: 'app-datatable',
     templateUrl: './datatable.component.html'
 })
-export class DataTableComponent {
+export class DataTableComponent implements OnInit {
+
+    private searchText$ = new Subject<string>();
 
     @Input()
     model!: DatatableOption;
@@ -44,7 +48,7 @@ export class DataTableComponent {
     get totalRecords() : number {
         if (this.model.pagedResult)
             return this.model.pagedResult.total;
-
+        
         return 0;
     }
 
@@ -55,9 +59,23 @@ export class DataTableComponent {
         return [];
     }
 
+    ngOnInit(): void {
+        this.searchText$.pipe(
+            debounceTime(300),
+            distinctUntilChanged()
+        )
+        .subscribe(x => this.searchChange.emit(x));
+    }
+
     onPageChange(arg: any) {
         this.pageChange.emit((arg.first / arg.rows) + 1);
     }
+
+    onSearch(event: Event) {
+        const value = (event.target as HTMLInputElement).value;
+        this.searchText$.next(value);
+    }
+    
 }
 
 @NgModule({
@@ -69,7 +87,8 @@ export class DataTableComponent {
         CommonModule,
         SkeletonModule,
         ReactiveFormsModule,
-        ServeSyncFormControlModule
+        ServeSyncFormControlModule,
+        InputTextModule
     ],
     exports: [
         DataTableComponent
