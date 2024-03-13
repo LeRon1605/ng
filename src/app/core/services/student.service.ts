@@ -5,11 +5,20 @@ import { StudentApiService } from "../apis/student.api";
 export class StudentService {
     constructor(private studentApiService: StudentApiService) {}
 
-    getAllStudents(page: number, size: number, searchText: string) {
+    getAllStudents(page: number
+        , size: number
+        , searchText: string
+        , facultyId?: string
+        , homeRoomId?: string
+        , educationProgramId?: string) {
+
         return this.studentApiService.getAllStudents({
             page, 
             size,
-            search: searchText
+            search: searchText,
+            facultyId,
+            homeRoomId,
+            educationProgramId
         });
     }
     

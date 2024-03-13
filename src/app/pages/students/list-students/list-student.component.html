@@ -2,5 +2,7 @@
     [model]="dataTable"
     (pageChange)="onPageChange($event)"
     (searchChange)="onSearchChange($event)"
+    (filterChange)="onFilterChange($event)"
+    [filterFields]="filterFields"
     styleClass="mt-3"
 ></app-datatable>

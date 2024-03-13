@@ -3,6 +3,7 @@ import { LinkComponent } from "./link/link.component";
 import { ButtonModule } from 'primeng/button';
 import { RouterLink } from "@angular/router";
 import { ButtonComponent } from "./button/button.component";
+import { BadgeModule } from "primeng/badge";
 
 @NgModule({
     declarations: [
@@ -11,6 +12,7 @@ import { ButtonComponent } from "./button/button.component";
     ],
     imports: [
         ButtonModule,
+        BadgeModule,
         RouterLink
     ],
     exports: [

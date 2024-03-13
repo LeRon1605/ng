@@ -1,38 +1,47 @@
-<!-- <dx-popup
-    [(visible)]="isVisible"
-    [hideOnOutsideClick]="true"
-    [height]="300"
-    [width]="500"
-    [showCloseButton]="false"
-    title="Lọc dữ liệu"
-    contentTemplate="popup-content">
-    <div *dxTemplate="let data of 'popup-content'">
-        <dx-scroll-view 
-            width="100%"
-            height="100%">
-            <ng-container *ngFor="let field of fields">
-                <dx-drop-down-box
-                    [label]="field.name"
-                    labelMode="floating"
-                    [(value)]="field.selectedValue"
-                    placeholder="Select a value..."
-                    (onValueChanged)="syncTreeViewSelection($event)">
-                    <dx-list 
-                        displayExpr="text"
-                        keyExpr="value"
-                        [dataSource]="field.data" 
-                        (onSelectionChanged)="changeDropDownBoxValue($event)"
-                    >
-                    </dx-list>
-                </dx-drop-down-box>
-            </ng-container>
-        </dx-scroll-view>
+<p-overlayPanel #op>
+    <div class="p-2 w-96">
+        <p>Danh sách lọc</p>
+        <p class="font-light italic text-xs" *ngIf="isDraft">Bản nháp</p>
+        <ng-container *ngFor="let field of fields">
+            <div class="p-float-label mt-10">
+                <p-dropdown 
+                    [(ngModel)]="field.selectedValue"
+                    [showClear]="true" 
+                    [options]="field.data"
+                    [placeholder]="field.placeHolder"
+                    (onChange)="isDraft = true"
+                    styleClass="bg-gray-50 border border-gray-300 w-full"
+                    optionLabel="text" 
+                    optionValue="value"
+                ></p-dropdown>
+                <label for="float-label">{{ field.name }}</label>
+            </div>
+        </ng-container>
+        <div class="mt-10 flex flex-row justify-between">
+            <div>
+                <app-button
+                    text="Thêm lọc"
+                    styleClass="ml-auto"
+                >
+                </app-button>
+            </div>
+            <div>
+                <app-button
+                    text="Hủy"
+                    styleClass="mr-1"
+                >
+                </app-button>
+                <app-button
+                    text="Áp dụng lọc"
+                    styleClass="ml-auto"
+                    (onClick)="onApplyFilter()"
+                >
+                </app-button>
+            </div>
+        </div>
     </div>
-    <dxo-position my="right top" at="right bottom" of="#target" collision="fit"></dxo-position>
-</dx-popup>
-
-<dx-button
-    id="target"
+</p-overlayPanel>
+<app-button 
+    (onClick)="op.toggle($event)" 
     text="Lọc"
-    (onClick)="togglePopup()">
-</dx-button> -->
+></app-button>

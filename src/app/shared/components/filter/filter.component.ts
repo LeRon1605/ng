@@ -1,84 +1,93 @@
-import { Component, Input, NgModule, OnInit } from "@angular/core";
-import { ActiveFilter, FilterField } from "./filter.shema";
+import { Component, EventEmitter, Input, NgModule, OnInit, Output } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { ServeSyncCommonModule } from "../common/common.module";
+import { DropdownModule } from 'primeng/dropdown';
+import { BadgeModule } from 'primeng/badge';
+import { FormsModule } from "@angular/forms";
+
+export interface FilterField {
+    id: string;
+    name: string;
+    type?: string;
+    placeHolder?: string;
+    data: FilterData[];
+    selectedValue?: any;
+}
+
+export interface FilterData {
+    text: any;
+    value: any;
+}
+
+export interface SelectedFilterField {
+    id: string;
+    name: string;
+    value: any;
+}
 
 @Component({
     selector: 'app-filter',
     templateUrl: './filter.component.html'
 })
 export class FilterComponent implements OnInit {
-    value: string = '1';
-    ngOnInit(): void {
-        this.filters = [
-            {
-                field: {
-                    id: '1',
-                    name: 'Field 1',
-                    type: '1',
-                    data: [{
-                        text: 'Hôm nay',
-                        value: '1'
-                    }]
-                },
-                selectedValue: {
-                    text: 'Hôm nay',
-                    value: '1'
-                }
-            }
-        ];
-    }
+    
+    isDraft: boolean = false;
+
+    @Output()
+    filterChange = new EventEmitter<SelectedFilterField[]>();
+
     @Input()
     fields: FilterField[] = [
         {
             id: '1',
             name: 'Field 1',
             type: '1',
-            data: [{
-                text: 'Hôm nay',
-                value: '1'
-            },
-            {
-                text: 'Hôm nay 2',
-                value: '2'
-            }],
-            selectedValue: {
-                text: 'Hôm nay',
-                value: '1'
-            }
+            data: [
+                {
+                    text: 'Hôm nay',
+                    value: '1'
+                },
+                {
+                    text: 'Hôm nay 2',
+                    value: '2'
+                }
+            ],
+            selectedValue: '1'
+        },
+        {
+            id: '1',
+            name: 'Field 1',
+            type: '1',
+            data: [
+                {
+                    text: 'Hôm nay',
+                    value: '1'
+                },
+                {
+                    text: 'Hôm nay 2',
+                    value: '2'
+                }
+            ],
+            selectedValue: '1'
         }
     ]
 
-    // @Input()
-    filters: ActiveFilter[] = [
-        {
-            field: {
-                id: '1',
-                name: 'Field 1',
-                type: '1',
-                data: [{
-                    text: 'Hôm nay',
-                    value: '1'
-                }]
-            },
-            selectedValue: {
-                text: 'Hôm nay',
-                value: '1'
-            }
-        }
-    ];
+    onApplyFilter() {
+        const selectedFilters = this.fields.map(x => {
+            return {
+                id: x.id,
+                name: x.name,
+                value: x.selectedValue
+            };
+        });
 
-    isVisible = false;
-
-    togglePopup() {
-        this.isVisible = !this.isVisible;
+        this.isDraft = false;
+        this.filterChange.emit(selectedFilters);
     }
 
-    changeDropDownBoxValue (args: any) {
-        console.log(args);
-    }
-
-    syncTreeViewSelection(args: any) {
-        console.log('a', args);    
+    ngOnInit(): void {
+        
     }
 }
 
@@ -88,7 +97,11 @@ export class FilterComponent implements OnInit {
     ],
     imports: [
         CommonModule,
-
+        OverlayPanelModule,
+        DropdownModule,
+        ServeSyncCommonModule,
+        BadgeModule,
+        FormsModule
     ],
     exports: [
         FilterComponent

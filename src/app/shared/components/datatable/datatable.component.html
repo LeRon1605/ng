@@ -13,11 +13,16 @@
     <ng-template pTemplate="caption">
         <div class="flex flex-row items-center">
             <span> {{ model.title }} </span>
-            <div class="p-input-icon-left ml-auto">
+            <div class="p-input-icon-left ml-auto flex flex-row items-center">
+                <app-filter 
+                    *ngIf="filterFields"
+                    [fields]="filterFields"
+                    (filterChange)="onFilterChange($event)"
+                ></app-filter>
                 <input 
                     id="input"
                     (keyup)="onSearch($event)"
-                    class=" text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-50 border border-gray-300 text-gray-900"
+                    class=" text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-50 border border-gray-300 text-gray-900 ms-2"
                     placeholder="Nhập thông tin tìm kiếm"
                     pInputText 
                 />

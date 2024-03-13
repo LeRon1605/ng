@@ -21,5 +21,7 @@ export interface StudentViewModel {
 }
 
 export interface StudentFilterAndPagingRequest extends PagedRequest {
-
+    homeRoomId?: string;
+    facultyId?: string;
+    educationProgramId?: string;
 }

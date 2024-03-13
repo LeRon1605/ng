@@ -7,6 +7,7 @@ import { ServeSyncFormControlModule } from "../form-controls/form-control.module
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { InputTextModule } from 'primeng/inputtext';
 import { Subject, debounceTime, distinctUntilChanged } from "rxjs";
+import { FilterField, FilterModule, SelectedFilterField } from "../filter/filter.component";
 
 export interface DatatableOption {
     title: string | null;
@@ -40,6 +41,12 @@ export class DataTableComponent implements OnInit {
 
     @Output()
     searchChange = new EventEmitter<string>();
+
+    @Output()
+    filterChange = new EventEmitter<SelectedFilterField[]>();
+
+    @Input()
+    filterFields?: FilterField[];
 
     filterForm = new FormGroup({
         search: new FormControl('')
@@ -75,6 +82,10 @@ export class DataTableComponent implements OnInit {
         const value = (event.target as HTMLInputElement).value;
         this.searchText$.next(value);
     }
+
+    onFilterChange(filters: SelectedFilterField[]) {
+        this.filterChange.emit(filters);
+    }
     
 }
 
@@ -88,7 +99,8 @@ export class DataTableComponent implements OnInit {
         SkeletonModule,
         ReactiveFormsModule,
         ServeSyncFormControlModule,
-        InputTextModule
+        InputTextModule,
+        FilterModule
     ],
     exports: [
         DataTableComponent

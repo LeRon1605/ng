@@ -20,11 +20,23 @@ export class StudentApiService extends BaseApiService {
         }
 
         if (studentPagedRequest.size) {
-            params= params.append('size', studentPagedRequest.size);
+            params = params.append('size', studentPagedRequest.size);
         }
 
         if (studentPagedRequest.search && studentPagedRequest.search !== '') {
-            params= params.append('search', studentPagedRequest.search);
+            params = params.append('search', studentPagedRequest.search);
+        }
+
+        if (studentPagedRequest.homeRoomId && studentPagedRequest.homeRoomId !== '') {
+            params = params.append('homeRoomId', studentPagedRequest.homeRoomId);
+        }
+
+        if (studentPagedRequest.facultyId && studentPagedRequest.facultyId !== '') {
+            params = params.append('facultyId', studentPagedRequest.facultyId);
+        }
+
+        if (studentPagedRequest.educationProgramId && studentPagedRequest.educationProgramId !== '') {
+            params = params.append('educationProgramId', studentPagedRequest.educationProgramId);
         }
         
         return params;

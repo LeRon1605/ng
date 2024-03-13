@@ -3,6 +3,7 @@ import { StudentViewModel } from "../../../core/schemas/student.schema";
 import { EducationProgramService, FacultyService, HomeRoomService, StudentService } from "../../../core/services";
 import { PagedResult } from "../../../core/schemas/paged.schema";
 import { DatatableOption } from "../../../shared/components/datatable/datatable.component";
+import { FilterField, SelectedFilterField } from "../../../shared/components/filter/filter.component";
 
 @Component({
     selector: 'app-list-student',
@@ -13,9 +14,14 @@ export class ListStudentComponent implements OnInit {
     currentPage = 1;
     search = '';
     students!: PagedResult<StudentViewModel>;
+    filterFields: FilterField[] = [];
+    filterParams : { facultyId?: string, homeRomeId?: string, educationProgramId?: string } = {
+        
+    };
+
     dataTable: DatatableOption = {
         title: 'Danh sách sinh viên',
-        rows: 10,
+        rows: 13,
         columns: [
             {
                 name: 'Họ và tên',
@@ -35,11 +41,6 @@ export class ListStudentComponent implements OnInit {
                 generate: x => x ? 'Nam' : 'Nữ'
             },
             {
-                name: 'Giới tính',
-                field: 'gender',
-                generate: x => x.gender ? 'Nam' : 'Nữ'
-            },
-            {
                 name: 'Quê quán',
                 field: 'homeTown'
             },
@@ -52,6 +53,11 @@ export class ListStudentComponent implements OnInit {
                 name: 'Lớp SH',
                 field: 'homeRoom.name',
                 generate: x => x.homeRoom.name
+            },
+            {
+                name: 'Hệ đào tạo',
+                field: 'educationProgram.name',
+                generate: x => x.educationProgram.name
             },
             {
                 name: 'Điểm',
@@ -71,50 +77,62 @@ export class ListStudentComponent implements OnInit {
 
         this.loadData();
 
-        // this.facultyService.getAllFaculties()
-        //     .pipe(
-        //         map(faculties => {
-        //             return faculties.map(f => {
-        //                 return {
-        //                     text: f.name,
-        //                     value: ['faculty', f.id]
-        //                 }
-        //             })
-        //         })
-        //     )
-        //     .subscribe(faculties => {
-        //         this.facultyDataSource = faculties;
-        //     });
+        this.filterFields.push({
+            id: 'gender',
+            name: 'Giới tính',
+            data: [
+                {
+                    text: 'Nam',
+                    value: true
+                },
+                {
+                    text: 'Nữ',
+                    value: false
+                }
+            ]
+        });
 
-        // this.homeRoomService.getAllHomeRoom()
-        //     .pipe(
-        //         map(homeRooms => {
-        //             return homeRooms.map(r => {
-        //                 return {
-        //                     text: r.name,
-        //                     value: ['homeroom', r.id]
-        //                 }
-        //             })
-        //         })
-        //     )
-        //     .subscribe(homeRooms => {
-        //         this.homeRoomDataSource = homeRooms;
-        //     });
+        this.facultyService.getAllFaculties()
+            .subscribe(faculties => {
+                this.filterFields.push({
+                    id: 'faculty',
+                    name: 'Khoa',
+                    data: faculties.map(x => {
+                        return {
+                            text: x.name,
+                            value: x.id
+                        }
+                    })
+                })
+            });
 
-        // this.educationProgramService.getAllEducationPrograms()
-        //     .pipe(
-        //         map(educationPrograms => {
-        //             return educationPrograms.map(r => {
-        //                 return {
-        //                     text: r.name,
-        //                     value: ['education-program', r.id]
-        //                 }
-        //             })
-        //         })
-        //     )
-        //     .subscribe(educationPrograms => {
-        //         this.educationProgramDataSource = educationPrograms;
-        //     });
+        this.homeRoomService.getAllHomeRoom()
+            .subscribe(homeRooms => {
+                this.filterFields.push({
+                    id: 'homeRoom',
+                    name: 'Lớp sinh hoạt',
+                    data: homeRooms.map(x => {
+                        return {
+                            text: x.name,
+                            value: x.id
+                        }
+                    })
+                })
+            });
+
+        this.educationProgramService.getAllEducationPrograms()
+            .subscribe(educationPrograms => {
+                this.filterFields.push({
+                    id: 'educationProgram',
+                    name: 'Hệ đào tạo',
+                    data: educationPrograms.map(x => {
+                        return {
+                            text: x.name,
+                            value: x.id
+                        }
+                    })
+                })
+            });
     }
 
     onPageChange(page: number) {
@@ -127,8 +145,30 @@ export class ListStudentComponent implements OnInit {
         this.loadData();
     }
 
+    onFilterChange(filters: SelectedFilterField[]) {
+        this.currentPage = 1;
+
+        for (let filter of filters) {
+            switch (filter.id) {
+                case 'faculty':
+                    this.filterParams.facultyId = filter.value;
+                    break;
+
+                case 'homeRoom':
+                    this.filterParams.homeRomeId = filter.value;
+                    break;
+
+                case 'educationProgram':
+                    this.filterParams.educationProgramId = filter.value;
+                    break;
+            }
+        }
+
+        this.loadData();
+    }
+
     loadData() {
-        this.studentService.getAllStudents(this.currentPage, this.dataTable.rows, this.search).subscribe(x => {
+        this.studentService.getAllStudents(this.currentPage, this.dataTable.rows, this.search, this.filterParams.facultyId, this.filterParams.homeRomeId, this.filterParams.educationProgramId).subscribe(x => {
             this.dataTable.pagedResult = x;
         });
     }

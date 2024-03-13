@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 
 @Component({
     selector: 'app-button',
@@ -16,4 +16,10 @@ export class ButtonComponent {
 
     @Input()
     type!: string;
+
+    @Input()
+    styleClass?: string;
+
+    @Output()
+    onClick = new EventEmitter<MouseEvent>();
 }
