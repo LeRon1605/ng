@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BaseApiService } from "./base.api";
-import { StudentFilterAndPagingRequest, StudentViewModel } from "../schemas/student.schema";
+import { StudentDetailViewModel, StudentFilterAndPagingRequest, StudentViewModel } from "../schemas/student.schema";
 import { PagedResult } from "../schemas/paged.schema";
 import { HttpParams } from "@angular/common/http";
 
@@ -10,6 +10,10 @@ export class StudentApiService extends BaseApiService {
         return this.http.get<PagedResult<StudentViewModel>>(this.API_END_POINTS.STUDENT, {
             params: this.getPagingParams(studentPagedRequest)
         });
+    }
+
+    getById(id: string) {
+        return this.http.get<StudentDetailViewModel>(`${this.API_END_POINTS.STUDENT}/${id}`);
     }
 
     private getPagingParams(studentPagedRequest: StudentFilterAndPagingRequest) : HttpParams {
@@ -37,6 +41,10 @@ export class StudentApiService extends BaseApiService {
 
         if (studentPagedRequest.educationProgramId && studentPagedRequest.educationProgramId !== '') {
             params = params.append('educationProgramId', studentPagedRequest.educationProgramId);
+        }
+
+        if (studentPagedRequest.gender != undefined) {
+            params = params.append('gender', studentPagedRequest.gender);
         }
         
         return params;

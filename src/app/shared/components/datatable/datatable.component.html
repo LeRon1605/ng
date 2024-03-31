@@ -3,12 +3,14 @@
     [lazy]="true"
     [paginator]="true"
     [rows]="model.rows"
-    [showCurrentPageReport]="true"
     [tableStyle]="{ 'min-width': '50rem' }"
     [totalRecords]="totalRecords"
+    [(selection)]="selectedRow"
+    selectionMode="single"
     (onPage)="onPageChange($event)"
+    (onRowSelect)="onRowSelected($event)"
     styleClass="p-datatable-gridlines {{ styleClass }}" 
-    currentPageReportTemplate="Hiển thị {{ model.rows }} trên {totalRecords} kết quả">
+    paginatorStyleClass="ml-auto">
 
     <ng-template pTemplate="caption">
         <div class="flex flex-row items-center">
@@ -48,7 +50,7 @@
             </tr>
         </ng-container>
         <ng-container *ngIf="model.pagedResult">
-            <tr>
+            <tr [pSelectableRow]="row">
                 <td class="border" *ngFor="let col of model.columns" [innerHTML]="col.generate != null ? col.generate(row) : row[col.field]"></td>
             </tr>
         </ng-container>

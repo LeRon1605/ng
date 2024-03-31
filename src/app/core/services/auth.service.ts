@@ -34,7 +34,6 @@ export class AuthService {
 
     return this.authApiService.signIn(signInRequest).pipe(
       tap(response => {
-        console.log(response);
         this.tokenStorageService.setAccessToken(response.accessToken);
         this.tokenStorageService.setRefreshToken(response.refreshToken);
       }),
@@ -45,7 +44,6 @@ export class AuthService {
       }),
       catchError<any, Observable<ErrorApiResponse>>((errorResponse) : Observable<ErrorApiResponse> => {
         this.authenticated.next(false);
-        console.log(errorResponse);
         return throwError({
           code: errorResponse.error.code,
           message: errorResponse.error.message

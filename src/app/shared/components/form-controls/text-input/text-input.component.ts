@@ -23,6 +23,9 @@ export class TextInputComponent implements ControlValueAccessor {
     @Input()
     styleClass?: string;
 
+    @Input()
+    loading?: boolean;
+
     @Input('value')
     get value(): string {
         return this._value;

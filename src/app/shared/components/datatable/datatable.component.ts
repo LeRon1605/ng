@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, NgModule, OnInit, Output } from "@angular/core";
-import { TableModule } from 'primeng/table';
+import { TableModule, TableRowSelectEvent } from 'primeng/table';
 import { SkeletonModule } from 'primeng/skeleton';
 import { PagedResult } from "../../../core/schemas/paged.schema";
 import { ServeSyncFormControlModule } from "../form-controls/form-control.module";
@@ -36,6 +36,9 @@ export class DataTableComponent implements OnInit {
     @Input()
     styleClass?: string;
 
+    @Input()
+    filterFields?: FilterField[];
+
     @Output()
     pageChange = new EventEmitter<number>();
 
@@ -45,12 +48,14 @@ export class DataTableComponent implements OnInit {
     @Output()
     filterChange = new EventEmitter<SelectedFilterField[]>();
 
-    @Input()
-    filterFields?: FilterField[];
+    @Output()
+    rowSelected = new EventEmitter<any>();
 
     filterForm = new FormGroup({
         search: new FormControl('')
     })
+
+    selectedRow: any;
 
     get totalRecords() : number {
         if (this.model.pagedResult)
@@ -85,6 +90,10 @@ export class DataTableComponent implements OnInit {
 
     onFilterChange(filters: SelectedFilterField[]) {
         this.filterChange.emit(filters);
+    }
+
+    onRowSelected(event: TableRowSelectEvent) {
+        this.rowSelected.emit(event.data);
     }
     
 }

@@ -1,0 +1,86 @@
+<form [formGroup]="form">
+
+    <img [src]="student?.imageUrl"/>
+
+    <app-text-input
+        [loading]="loading"
+        title="Mã sinh viên"
+        placeHolder="Nhập mã sinh viên"
+        formControlName="code"
+    >
+    </app-text-input>
+
+    <app-text-input
+        [loading]="loading"
+        title="Họ và tên"
+        placeHolder="Nhập họ và tên sinh viên"
+        formControlName="fullName"
+    >
+    </app-text-input>
+
+    <app-text-input
+        [loading]="loading"
+        title="Email"
+        placeHolder="Nhập địa chỉ email"
+        formControlName="email"
+    >
+    </app-text-input>
+
+    <app-text-input
+        [loading]="loading"
+        title="Số điện thoại"
+        placeHolder="Nhập số điện thoại"
+        formControlName="phone"
+    >
+    </app-text-input>
+
+    <app-text-input
+        [loading]="loading"
+        title="Địa chỉ"
+        placeHolder="Nhập địa chỉ sinh viên"
+        formControlName="address"
+    >
+    </app-text-input>
+
+    <app-text-input
+        [loading]="loading"
+        title="Quê quán"
+        placeHolder="Nhập quê quán sinh viên"
+        formControlName="homeTown"
+    >
+    </app-text-input>
+
+    <app-text-input
+        [loading]="loading"
+        title="Căn cước công dân"
+        placeHolder="Nhập căn cước công dân"
+        formControlName="citizenId"
+    >
+    </app-text-input>
+
+    <app-dropdown-input
+        [items]="faculties"
+        (selectedValueChange)="onFacultyChanged($event)"
+        title="Khoa"
+        placeHolder="Chọn khoa"
+        formControlName="faculty"
+    >
+    </app-dropdown-input>
+
+    <app-dropdown-input
+        [items]="homeRooms"
+        title="Lớp"
+        placeHolder="Chọn lớp sinh hoạt"
+        formControlName="homeRoom"
+    >
+    </app-dropdown-input>
+
+    <app-dropdown-input
+        [items]="educationPrograms"
+        title="Hệ đào tạo"
+        placeHolder="Chọn hệ đào tạo"
+        formControlName="educationProgram"
+    >
+    </app-dropdown-input>
+
+</form>

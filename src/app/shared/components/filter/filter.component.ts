@@ -2,22 +2,19 @@ import { Component, EventEmitter, Input, NgModule, OnInit, Output } from "@angul
 import { CommonModule } from "@angular/common";
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ServeSyncCommonModule } from "../common/common.module";
-import { DropdownModule } from 'primeng/dropdown';
+import { DropdownChangeEvent, DropdownModule } from 'primeng/dropdown';
 import { BadgeModule } from 'primeng/badge';
 import { FormsModule } from "@angular/forms";
+import { DropDownItem } from "../form-controls/dropwdown-input/dropdown-input.component";
 
 export interface FilterField {
     id: string;
     name: string;
     type?: string;
     placeHolder?: string;
-    data: FilterData[];
+    data: DropDownItem[];
     selectedValue?: any;
-}
-
-export interface FilterData {
-    text: any;
-    value: any;
+    selectedValueChanged?: (value: any) => void;
 }
 
 export interface SelectedFilterField {
@@ -38,40 +35,7 @@ export class FilterComponent implements OnInit {
     filterChange = new EventEmitter<SelectedFilterField[]>();
 
     @Input()
-    fields: FilterField[] = [
-        {
-            id: '1',
-            name: 'Field 1',
-            type: '1',
-            data: [
-                {
-                    text: 'Hôm nay',
-                    value: '1'
-                },
-                {
-                    text: 'Hôm nay 2',
-                    value: '2'
-                }
-            ],
-            selectedValue: '1'
-        },
-        {
-            id: '1',
-            name: 'Field 1',
-            type: '1',
-            data: [
-                {
-                    text: 'Hôm nay',
-                    value: '1'
-                },
-                {
-                    text: 'Hôm nay 2',
-                    value: '2'
-                }
-            ],
-            selectedValue: '1'
-        }
-    ]
+    fields: FilterField[] = [];
 
     onApplyFilter() {
         const selectedFilters = this.fields.map(x => {
@@ -86,8 +50,18 @@ export class FilterComponent implements OnInit {
         this.filterChange.emit(selectedFilters);
     }
 
+    onResetFilter() {
+        this.fields.forEach(x => x.selectedValue = null);
+        this.onApplyFilter();
+    }
+
     ngOnInit(): void {
         
+    }
+
+    onFilterFieldChanged(field: FilterField, event: DropdownChangeEvent) {
+        if (field.selectedValueChanged)
+            field.selectedValueChanged(event.value);
     }
 }
 

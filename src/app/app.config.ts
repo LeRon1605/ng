@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
@@ -9,6 +9,11 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { ToastService } from './core/services';
 import { MessageService } from 'primeng/api';
 import { AuthGuard } from './core/guards/auth.guard';
+import { StudentState } from './core/states/students/student.state';
+import { NgxsModule } from '@ngxs/store';
+import { EducationProgramState } from './core/states/education-programs/education-program.state';
+import { FacultyState } from './core/states/faculties/faculty.state';
+import { HomeRoomState } from './core/states/home-rooms/home-room.state';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,6 +33,14 @@ export const appConfig: ApplicationConfig = {
     ToastService,
     AuthGuard,
     provideAnimations(),
-    provideClientHydration()
-  ]
+    provideClientHydration(),
+    importProvidersFrom(    
+      NgxsModule.forRoot([
+        StudentState,
+        EducationProgramState,
+        FacultyState,
+        HomeRoomState
+      ]
+    ))
+  ],
 };
